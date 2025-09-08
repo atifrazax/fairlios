@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Made with ❤️ by Atif Raza | www.atifraza.is-great.net</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="/css/style.css"> -->
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"> -->
+  <style>
+  @media print {
+    @page {
+      margin: 10mm; /* adjust margins, smaller = more space */
+    }
+    .container, .container-fluid {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    
+  }
+  /* Table style */
+  .table th {
+    background-color: #f1f1f1 !important; /* light gray header */
+    color: #333 !important;              /* dark text */
+  }
+
+  .table td {
+    color: #555 !important;              /* dim body text */
+  }
+
+  /* Remove excessive spacing */
+  .table th, .table td {
+    padding: 6px !important;
+    font-size: 13px;
+  }
+  }
+</style>
+
+</head>
+<body>
+    <!-- 🖨️ Print-Friendly Container -->
+<div class="container d-none d-print-block">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold mt-3">Fair Group Report</h2>
+    <p class="text-muted">Generated on <%= new Date().toDateString() %> by <%= user.name %><br><%= user.email %></p>
+  </div>
+  <!-- Group Info -->
+  <div class="mb-3">
+    <h4 class="fw-bold">Group: <%= group.expenseCode %></h4>
+    <p><strong>Average Share:</strong> Rs <%= avgShare %></p>
+    <p><strong>Members(<%= group.members.length %>):</strong>
+      <% group.members.forEach(m => { %>
+        <%= m.name %><% if (group.members.indexOf(m) !== group.members.length - 1) { %>, <% } %>
+      <% }) %>
+    </p>
+  </div>
+  <!-- Expenses Table -->
+  <% if (expenses.length > 0) { %>
+    <h5 class="fw-bold mb-2">Expenses</h5>
+    <table class="table table-bordered table-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Title</th>
+          <th>Amount</th>
+          <th>Note</th>
+          <th>Date</th>
+          <th>Paid By</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% expenses.forEach(exp => { %>
+          <tr>
+            <td><%= exp.title %></td>
+            <td>Rs <%= exp.amount %></td>
+            <td><%= exp.note || "-" %></td>
+            <td><%= exp.date.toDateString() %></td>
+            <td><%= exp.createdBy.name %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No expenses recorded.</p>
+  <% } %>
+
+  <!-- Totals -->
+  <h5 class="fw-bold mt-4">Per Person Totals</h5>
+  <table class="table table-bordered table-sm">
+    <thead class="table-light">
+      <tr>
+        <th>Member</th>
+        <th>Total Spent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Object.keys(perUserTotals).forEach(uid => { %>
+        <tr>
+          <td><%= perUserTotals[uid].name %></td>
+          <td>Rs <%= perUserTotals[uid].total %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <!-- Balances -->
+  <h5 class="fw-bold mt-4">Balances (Who Owes Who)</h5>
+  <table class="table table-bordered table-sm">
+    <thead class="table-light">
+      <tr>
+        <th>Member</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% balances.forEach(b => { %>
+        <tr>
+          <td><%= b.name %></td>
+          <td><%= b.status %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-5 small text-muted">
+    <p>Fairlios · Group Expense Report</p>
+  </div>
+</div>
+<script>
+    window.onload = function () {
+      window.print();
+    //   Optional: close window after printing
+      window.onafterprint = () => window.close();
+    }
+  </script>
+</body>
+</html>

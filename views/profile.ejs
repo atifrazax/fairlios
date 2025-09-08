@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | Fairlios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <%- include('partials/header') %>
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="card shadow p-4">
+          <div class="d-flex justify-content-center my-4">
+            <img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= user.name %>"
+                alt="avatar"
+                class="rounded-circle border border-3 border-light shadow "
+                width="120" height="120">
+          </div>
+
+          <form action="/profile" method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" readonly disabled>
+            </div>
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+            </div>
+            
+            <div class="mb-3 ">
+              <label for="password" class="form-label">New Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank if not changing">
+            </div>
+            <div class="mb-3">
+              <small class="text-muted"> Note: You will be logout after update sucessfully </small>
+            </div>          
+               <!-- // flash message -->
+              <% if (error && error.length > 0) { %>
+                <div class="alert alert-danger">
+                  <% error.forEach(msg => { %>
+                    <p><%= msg %></p>
+                  <% }) %>
+                </div>
+              <% } %>
+            <button type="submit" class="btn btn-primary w-100">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

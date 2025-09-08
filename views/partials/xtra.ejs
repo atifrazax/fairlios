@@ -1,0 +1,36 @@
+<!-- -------Xtra Section 1------- -->
+
+<!-- Stats Section -->
+<div class="row mb-2">
+  <% Object.keys(perUserOverall).slice(0,3).forEach(u => { %>
+    <div class="col-4">
+      <div class="card text-center shadow-sm">
+        <div class="card-body p-2">
+          <h6 class="mb-1 text-primary"><%= u %></h6>
+          <small class="text-success">Rs <%= perUserOverall[u] %></small>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<!-- Expandable for more -->
+<% if (Object.keys(perUserOverall).length > 3) { %>
+  <button class="btn btn-sm btn-outline-secondary mb-3" 
+          data-bs-toggle="collapse" data-bs-target="#allUsers">
+    Show All Users ▼
+  </button>
+  <div id="allUsers" class="collapse">
+    <ul class="list-group">
+      <% Object.keys(perUserOverall).slice(3).forEach(u => { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span><%= u %></span>
+          <span class="fw-bold">Rs <%= perUserOverall[u] %></span>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<!-- -------/Xtra Section 1------- -->
+
