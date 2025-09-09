@@ -14,8 +14,8 @@ const sendMail = async (options) => {
         tls: {
             rejectUnauthorized: false // optional, only if self-signed cert
         },
-        logger: true,
-        debug: true
+        // logger: true,
+        // debug: true
     });
         const message = {
         from: `FAIRLIOS <${process.env.SMTP_SENDER}>`,
