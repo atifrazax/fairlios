@@ -18,7 +18,7 @@ const sendMail = async (options) => {
         debug: true
     });
         const message = {
-        from: `FAIRLIOS <${process.env.SMTP_EMAIL}>`,
+        from: `FAIRLIOS <${process.env.SMTP_SENDER}>`,
         to: options.email,
         subject: options.subject,
         text: options.message,
