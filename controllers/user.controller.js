@@ -8,6 +8,7 @@ dotenv.config();
 const createError = require('../utils/error.msgs');
 const paginate = require('../utils/paginate');
 const mongoose = require('mongoose');
+const sendMail = require("../utils/sendMail");
 
 
 /// Register Page
@@ -18,9 +19,21 @@ const registerPage = (req, res) => {
 const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-    await User.create({ name, email, password });  // validation check will be handled by mongoose schema
-
-    req.flash("success", "Account registered successfully. Login to continue.");
+    const user = await User.create({ name, email, password });  // validation check will be handled by mongoose schema
+    
+    if (user && user.isVerified === false) {
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const confirmURL = `${req.protocol}://${req.get('host')}/verify/${token}`;
+    sendMail( {
+      email,
+      subject: "Welcome to FAIRLIOS",
+      message: `Hi ${name}, \n\nWelcome to FAIRLIOS. \n\nPlease verify your email address within 24 hours by clicking the link below.\n\n${confirmURL}\n\nThanks,\nTeam FAIRLIOS`,
+    });
+  }else {
+    req.flash("error", "Something went wrong, Please try again.");
+    return res.redirect('/register');
+  }
+    req.flash("success", "Account registered successfully. Verify your email by clicking the link sent to your email.");
     res.redirect('login');
 
   } catch (err) {
@@ -68,13 +81,18 @@ const loginUser = async (req, res, next) => {
       return res.redirect("/register");
     }
     // password match through bcrypt method in user model
-    if( user && (await user.matchPassword(password)) ) {
+    if( user && (await user.matchPassword(password))) {
+      if (user.isVerified === false) {
+        req.flash("error", "Please verify your email first. Check your inbox or spam folder.");
+        return res.redirect("/login");
+      } else if (user.isVerified === true) {
       // generate JWT token
       const tokenData = { _id: user._id, name: user.name, email: user.email };
       const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1d' });
       // Store token in cookie
       res.cookie('token', token, { httpOnly: true, maxAge: 24*60*60*1000 }); // 24 hours
       res.redirect('/');
+      }
 
   } else {
       // return res.status(401).render('login',{ message: "Invalid email or password" });
@@ -238,6 +256,31 @@ const updateProfile = async (req, res, next) => {
   }
 }
 
+// Email Verification
+const emailVerification = async (req, res, next) => {
+  try {
+    if (req.params.token) {
+      const decoded = jwt.verify(req.params.token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded._id);
+      if (user) {
+        if (user.isVerified === true) {
+          req.flash("error", "Email already verified. Please login.");
+          return res.redirect("/login");
+        } else {
+          user.isVerified = true;
+          await user.save({ validateBeforeSave: false });
+          req.flash("success", "Email verified successfully. Please login.");
+          return res.redirect("/login");
+        }
+      }
+    }else {
+      req.flash("error", "Verification link expired");
+      return res.redirect("/login");
+    }
+  } catch (err) {
+    return next(err);
+  }
+}
 
-module.exports = { registerPage, registerUser, loginPage, loginUser, dashboard, logout, profilePage, updateProfile };
+module.exports = { registerPage, registerUser, loginPage, loginUser, dashboard, logout, profilePage, updateProfile, emailVerification };
 

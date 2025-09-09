@@ -13,6 +13,7 @@ router.get('/profile', isLoggedIn, userController.profilePage);
 router.post('/profile', isLoggedIn, userController.updateProfile);
 router.get('/about', (req, res) => res.render("about"));
 router.get('/logout', userController.logout);
+router.get('/verify/:token', userController.emailVerification);
 // Expense Routes
 router.get("/expense/group-detail/:code", isLoggedIn, expenseController.groupDetail);
 router.get("/expense/group-detail/print/:code", isLoggedIn, expenseController.groupDetailPrint); // Print Friendly
@@ -29,7 +30,7 @@ router.post("/group/delete/:code", isLoggedIn, groupController.deleteGroup); //u
 router.use((req, res) => res.status(404).render("404")); // 404
 // 500 & rest
 router.use( (err, req, res, next) => {
-    console.error(err);
+    // console.error(err);
     const status = err.status || 500;
     const message = err.message || "Something went wrong";
     res.status(status).render('oops', { message, status });
