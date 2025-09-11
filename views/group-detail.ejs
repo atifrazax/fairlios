@@ -13,7 +13,7 @@
   
   <div class="container my-3">
   <!-- Compact Group Info Bar -->
-  <div class="d-flex flex-wrap align-items-center justify-content-between bg-primary text-white rounded-4 shadow-sm px-4 py-2 gap-2">
+  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between bg-primary text-white rounded-4 shadow-sm px-4 py-2 gap-2">
 
     <!-- Logged-in User -->
     <% if (user) { %>
@@ -46,8 +46,8 @@
 
   <!-- Expenses List -->
   <div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top">
-      <span class="fw-bold"><i class="bi bi-receipt me-2"></i> All Expenses</span>
+    <div class="card-header bg-primary text-white d-flex flex-wrap justify-content-between align-items-center rounded-top">
+      <span class="fw-bold mb-2"><i class="bi bi-receipt me-2"></i> All Expenses</span>
       <div>
         <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
           <strong><i class="bi bi-folder-plus me-2"></i>Add</strong>
@@ -71,8 +71,8 @@
           <tr>
             <th>Title</th>
             <th>Amount</th>
-            <th>Note</th>
-            <th>Date</th>
+            <th class="d-none d-md-table-cell">Note</th>
+            <th class="d-none d-md-table-cell">Date</th>
             <th>Paid By</th>
           </tr>
         </thead>
@@ -80,37 +80,30 @@
           <% expenses.forEach(exp => { %>
             <tr>
               <td class="fw-bold"><%= exp.title %></td>
-              <td class="text-success">Rs <%= exp.amount %></td>
-              <td><%= exp.note || "-" %></td>
-              <td><%= exp.date.toDateString() %></td>
+              <td class="text-success"><%= exp.amount %></td>
+              <td class="d-none d-md-table-cell"><%= exp.note || "-" %></td>
+              <td class="d-none d-md-table-cell"><%= exp.date.toDateString() %></td>
+              
               <td class="align-middle">
-                <div class="d-flex align-items-center justify-content-between">
-                  
-                  <!-- Avatar + Name -->
-                  <div class="d-flex align-items-center">
-                    <img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= exp.createdBy.name %>"
-                        alt="avatar"
-                        width="35" height="35"
-                        class="rounded-circle me-2 border shadow-sm">
-                    <span class="fw-semibold text-truncate" style="max-width: 140px;">
-                      <%= exp.createdBy.name %>
-                    </span>
-                  </div>
+  <div class="d-flex align-items-center">
+    <!-- Avatar -->
+    <img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= exp.createdBy.name %>"
+         alt="avatar"
+         width="35" height="35"
+         class="rounded-circle me-2 border shadow-sm">
 
-                  <!-- Delete button (only if creator) -->
-                  <% if (user._id.toString() === exp.createdBy._id.toString()) { %>
-                    <form action="/expense/delete/<%= exp._id %>" method="POST" class="d-inline"
-                          onsubmit="return confirm('Are you sure you want to delete this expense?');">
-                      <button type="submit" 
-                              class="btn btn-sm btn-outline-danger ms-2 d-flex align-items-center justify-content-center"
-                              title="Delete Expense">
-                        <i class="bi bi-trash3"></i>
-                      </button>
-                    </form>
-                  <% } %>
+    <!-- Name + Eye Icon -->
+    <div class="d-flex align-items-center gap-1 flex-wrap">
+      <span class="fw-semibold"><%= exp.createdBy.name %></span>
+      <a data-bs-toggle="modal" 
+         data-bs-target="#viewExpenseModal<%= exp._id %>" 
+         class="d-block d-md-none">
+        <i class="bi bi-eye text-dark"></i>
+      </a>
+    </div>
+  </div>
+</td>
 
-                </div>
-              </td>
             </tr>
           <% }) %>
         </tbody>
@@ -160,9 +153,8 @@
       <% } %>
     <!-- </div> -->
   </div>
-
-  <div class="row">
     <!-- Per-User Totals -->
+  <div class="row">
     <div class="col-md-6">
       <div class="card shadow-sm mb-4">
         <div class="card-header bg-gradient bg-success text-white fw-bold">
@@ -241,6 +233,53 @@
     </div>
   </div>
 </div>
+
+<!-- View Expense Modals -->
+<% expenses.forEach(exp => { %>
+<div class="modal fade" id="viewExpenseModal<%= exp._id %>" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white p-2">
+        <h5 class="modal-title">Expense Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-2 border-bottom">
+          <div class="col-3"><strong>Title:</strong></div>
+          <div class="col-9"><%= exp.title %></div><div class="w-100"></div>
+        </div>
+        <div class="row mb-2 border-bottom">
+          <div class="col-3"><strong>Amount:</strong></div>
+          <div class="col-9"><%= exp.amount %></div><div class="w-100"></div>
+        </div>
+        <div class="row mb-2 border-bottom">
+          <div class="col-3"><strong>By:</strong></div>
+          <div class="col-9"><%= exp.createdBy?.name || "Unknown" %></div><div class="w-100"></div>
+        </div>
+        <div class="row mb-2 border-bottom">
+          <div class="col-3"><strong>Date:</strong></div>
+          <div class="col-9"><%= exp.date.toDateString() %></div><div class="w-100"></div>
+        </div>
+        <div class="row mb-2 border-bottom">
+          <div class="col-3"><strong>Notes:</strong></div>
+          <div class="col-9"><%= exp.note %></div><div class="w-100"></div>
+        </div>
+        <!-- Delete button (only if creator) -->
+                  <% if (user._id.toString() === exp.createdBy._id.toString()) { %>
+                    <form action="/expense/delete/<%= exp._id %>" method="POST" class="d-inline"
+                          onsubmit="return confirm('Are you sure you want to delete this expense?');">
+                      <button type="submit" 
+                              class="btn btn-sm btn-outline-danger ms-2 d-flex align-items-center justify-content-center"
+                              title="Delete Expense">
+                        <i class="bi bi-trash3 me-2"></i> Delete
+                      </button>
+                    </form>
+                  <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<% }) %>
 
 <!-- Delete Group Modal -->
 <div class="modal fade" id="deleteGroupModal" tabindex="-1" aria-labelledby="deleteGroupLabel" aria-hidden="true">

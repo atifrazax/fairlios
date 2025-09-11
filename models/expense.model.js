@@ -10,6 +10,7 @@ const expenseSchema = new mongoose.Schema({
     title: {
       type: String, 
       required: [ true, "❌ Title is required" ],
+      maxlength: [10, "❌ Title must be at most 10 characters long"],
       trim: true
   },
     amount: {

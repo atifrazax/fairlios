@@ -11,6 +11,9 @@ body {
 .navbar {
   background: linear-gradient(90deg, #4f46e5, #3b82f6); /* purple to blue */
 }
+.bg-primary {
+  background: linear-gradient(90deg, #4f46e5, #3b82f6); /* purple to blue */
+}
 .navbar-brand {
   font-weight: 700;
   letter-spacing: 0.5px;
