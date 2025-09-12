@@ -78,7 +78,7 @@
     }
   </style>
 </head>
-<body onload="window.print()">
+<body>
   <!--  Watermark -->
   <div class="watermark">FAIRLIOS <%= group.expenseCode %></div>
   <!-- /* Watermark -->
@@ -169,5 +169,12 @@
     <p>FAIRLIOS - Made with ❤️ by Atif Raza | www.atifraza.is-great.net</p>
   </div>
 </div>
+<script> document.addEventListener("DOMContentLoaded", function () {
+      // Wait a moment to let rendering finish
+      setTimeout(() => {
+        window.print();
+      }, 1000);
+    });
+</script>
 </body>
 </html>
