@@ -13,7 +13,8 @@
     "mongoose": "^8.18.0",
     "mongoose-paginate-v2": "^1.9.1",
     "nodemailer": "^7.0.6",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "puppeteer": "^24.20.0"
   },
   "name": "fairlios-project",
   "version": "1.0.0",

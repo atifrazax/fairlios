@@ -50,7 +50,7 @@
       <span class="fw-bold mb-2"><i class="bi bi-receipt me-2"></i> All Expenses</span>
       <div>
         <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
-          <strong><i class="bi bi-folder-plus me-2"></i>Add</strong>
+          <i class="bi bi-folder-plus me-2"></i>Add
         </button>        
         <a href="/expense/group-detail/print/<%= group.expenseCode %>" class="btn btn-sm btn-primary text-decoration-none text-white" target="_blank">
           <i class="bi bi-printer me-2"></i>Print
@@ -83,27 +83,23 @@
               <td class="text-success"><%= exp.amount %></td>
               <td class="d-none d-md-table-cell"><%= exp.note || "-" %></td>
               <td class="d-none d-md-table-cell"><%= exp.date.toDateString() %></td>
-              
               <td class="align-middle">
-  <div class="d-flex align-items-center">
-    <!-- Avatar -->
-    <img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= exp.createdBy.name %>"
-         alt="avatar"
-         width="35" height="35"
-         class="rounded-circle me-2 border shadow-sm">
-
-    <!-- Name + Eye Icon -->
-    <div class="d-flex align-items-center gap-1 flex-wrap">
-      <span class="fw-semibold"><%= exp.createdBy.name %></span>
-      <a data-bs-toggle="modal" 
-         data-bs-target="#viewExpenseModal<%= exp._id %>" 
-         class="d-block d-md-none">
-        <i class="bi bi-eye text-dark"></i>
-      </a>
-    </div>
-  </div>
-</td>
-
+                <div class="d-flex align-items-center">
+                  <!-- Avatar -->
+                  <img src="https://api.dicebear.com/9.x/initials/svg?seed=<%= exp.createdBy.name %>"
+                      alt="avatar"
+                      width="35" height="35"
+                      class="rounded-circle me-2 border shadow-sm">
+                  <!-- Name + Eye Icon -->
+                  <div class="d-flex align-items-center gap-1 flex-wrap">
+                    <span class="fw-semibold"><%= exp.createdBy.name %></span>
+                    <a data-bs-toggle="modal" 
+                      data-bs-target="#viewExpenseModal<%= exp._id %>">
+                      <i class="bi bi-eye text-dark"></i>
+                    </a>
+                  </div>
+                </div>
+              </td>
             </tr>
           <% }) %>
         </tbody>

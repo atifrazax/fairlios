@@ -17,6 +17,7 @@ It is built with **Node.js, Express, MongoDB (Mongoose), EJS, and Bootstrap**.
 - 📝 **Validation** – Mongoose schema validation for data integrity  
 - 📑 **Pagination** – Navigate through large lists of expenses  
 - 🔒 **Unique Constraints** – Prevent duplicate users and members  
+- 🖨️ **Print Feature** – Generate downloadable/printable PDFs using **Puppeteer**
 
 ---
 

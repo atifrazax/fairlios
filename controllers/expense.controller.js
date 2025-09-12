@@ -3,6 +3,9 @@ const crypto = require("crypto");
 const Group = require("../models/group.model");
 const createError = require("../utils/error.msgs");
 const paginate = require("../utils/paginate");
+const puppeteer = require("puppeteer");
+const ejs = require("ejs");
+const path = require("path");
 
 
 // Add Expense without Code field
@@ -161,8 +164,8 @@ const groupDetailPrint = async (req, res, next) => {
 
     if (!group) {
       return next(createError("Group not found", 404));
-    }
-
+    }    
+    // ----/Puppeteer code
     const expenses = await Expense.find({ group: group._id })
       .populate("createdBy", "name email").sort("-date")
       .lean();
@@ -229,17 +232,38 @@ const groupDetailPrint = async (req, res, next) => {
             : "Settled",
       };
     });
-    
-    // 🔹 7. Render
-    res.render("group-detail-print", {
-      user: req.user,
-      group,
-      expenses,
-      perUserTotals,
-      balances,
-      totalGroup: Number(totalGroup.toFixed(2)),
-      avgShare: Number(avgShare.toFixed(2)),
+    // ----Puppeteer code
+    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"], });
+    const page = await browser.newPage();
+    const htmlContent = await ejs.renderFile(
+      path.join(__dirname, "../views/group-detail-print.ejs"),
+      {
+        user: req.user,
+        group,
+        expenses,
+        perUserTotals,
+        balances,
+        totalGroup: Number(totalGroup.toFixed(2)),
+        avgShare: Number(avgShare.toFixed(2)),
+      }
+    );
+
+    await page.goto(`data:text/html,${encodeURIComponent(htmlContent)}`, {
+      waitUntil: "networkidle0",
     });
+    await page.evaluateHandle("document.fonts.ready");
+
+    // Debug screenshot
+    // await page.screenshot({ path: "debug.png", fullPage: true });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+    });
+    await browser.close();
+    res.contentType("application/pdf");
+    res.send(pdfBuffer);
+
   } catch (err) {
     return next(err);
   }
