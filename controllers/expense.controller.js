@@ -252,6 +252,11 @@ const groupDetailPrint = async (req, res, next) => {
     });
 
     // 🔹 Send PDF response
+    if (req.query.download === "true") {
+      res.setHeader("Content-Disposition", `attachment; filename=FAIRLIOS-${group.expenseCode}-REPORT.pdf`);
+    } else {
+      res.setHeader("Content-Disposition", `inline; filename=FAIRLIOS-${group.expenseCode}-REPORT.pdf`);
+    }
     res.contentType("application/pdf");
     res.send(pdfBuffer);
 
