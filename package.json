@@ -9,12 +9,12 @@
     "express-rate-limit": "^8.1.0",
     "express-session": "^1.18.2",
     "helmet": "^8.1.0",
+    "html-pdf-node": "^1.0.8",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "mongoose-paginate-v2": "^1.9.1",
     "nodemailer": "^7.0.6",
-    "nodemon": "^3.1.10",
-    "puppeteer": "^24.20.0"
+    "nodemon": "^3.1.10"
   },
   "name": "fairlios-project",
   "version": "1.0.0",

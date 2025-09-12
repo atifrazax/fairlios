@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const Group = require("../models/group.model");
 const createError = require("../utils/error.msgs");
 const paginate = require("../utils/paginate");
-const puppeteer = require("puppeteer");
+const pdf = require("html-pdf-node");
 const ejs = require("ejs");
 const path = require("path");
 
@@ -232,9 +232,8 @@ const groupDetailPrint = async (req, res, next) => {
             : "Settled",
       };
     });
-    // ----Puppeteer code
-    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"], });
-    const page = await browser.newPage();
+
+    // ----PDF code
     const htmlContent = await ejs.renderFile(
       path.join(__dirname, "../views/group-detail-print.ejs"),
       {
@@ -247,20 +246,12 @@ const groupDetailPrint = async (req, res, next) => {
         avgShare: Number(avgShare.toFixed(2)),
       }
     );
-
-    await page.goto(`data:text/html,${encodeURIComponent(htmlContent)}`, {
-      waitUntil: "networkidle0",
-    });
-    await page.evaluateHandle("document.fonts.ready");
-
-    // Debug screenshot
-    // await page.screenshot({ path: "debug.png", fullPage: true });
-
-    const pdfBuffer = await page.pdf({
+    let file = { content: htmlContent };
+    const pdfBuffer = await pdf.generatePdf(file, {
       format: "A4",
-      printBackground: true,
     });
-    await browser.close();
+
+    // 🔹 Send PDF response
     res.contentType("application/pdf");
     res.send(pdfBuffer);
 
