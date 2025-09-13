@@ -164,7 +164,7 @@ const groupDetailPrint = async (req, res, next) => {
 
     if (!group) {
       return next(createError("Group not found", 404));
-    }    
+    }
     // ----/Puppeteer code
     const expenses = await Expense.find({ group: group._id })
       .populate("createdBy", "name email").sort("-date")
@@ -249,15 +249,22 @@ const groupDetailPrint = async (req, res, next) => {
     let file = { content: htmlContent };
     const pdfBuffer = await pdf.generatePdf(file, {
       format: "A4",
+      margin: {
+        top: "1cm",
+        bottom: "1cm",
+        left: "1cm",
+        right: "1cm",
+      },
     });
 
     // 🔹 Send PDF response
-    if (req.query.download === "true") {
-      res.setHeader("Content-Disposition", `attachment; filename=FAIRLIOS-${group.expenseCode}-REPORT.pdf`);
-    } else {
-      res.setHeader("Content-Disposition", `inline; filename=FAIRLIOS-${group.expenseCode}-REPORT.pdf`);
-    }
     res.contentType("application/pdf");
+    if (req.query.download === "true") {
+      res.setHeader("Content-Disposition", `attachment; filename=FAIRLIOS-${group.expenseCode}-REPORT-${new Date().toISOString()}.pdf`);
+    } else {
+      // default: open inline
+      res.setHeader("Content-Disposition", `inline; filename=FAIRLIOS-${group.expenseCode}-REPORT-${new Date().toISOString()}.pdf`);
+    }
     res.send(pdfBuffer);
 
   } catch (err) {

@@ -8,7 +8,7 @@ dotenv.config();
 const createError = require('../utils/error.msgs');
 const paginate = require('../utils/paginate');
 const mongoose = require('mongoose');
-const sendMail = require("../utils/sendMail");
+const sendMail = require("../utils/brevoMail");
 
 
 /// Register Page
