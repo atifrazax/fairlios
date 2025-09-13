@@ -8,10 +8,11 @@ It is built with **Node.js, Express, MongoDB (Mongoose), EJS, and Bootstrap**.
 ## 📖 Features  
 
 - 👤 **User Authentication** – Register, login, and manage sessions  
+- 📧 **Email Verification** – New users receive a verification link via email during registration to confirm their account before login
 - 🔑 **Secure Passwords** – User passwords are hashed using **bcrypt**  
 - 🍪 **JWT Authentication** – Uses **JSON Web Tokens** stored in cookies for secure auth  
 - ⚡ **Flash Messages** – Success and error messages displayed using **express-session**  
-- 👥 **Groups** – Create groups and invite members  
+- 👥 **Groups** – Create groups and invite members through Unique Code 
 - 💸 **Expenses** – Add expenses with title, amount, and note  
 - 🔀 **Auto-Split** – Fairly divides expenses among group members  
 - 📝 **Validation** – Mongoose schema validation for data integrity  

@@ -6,7 +6,7 @@ const defaultClient = SibApiV3Sdk.ApiClient.instance;
 
 // Configure API key authorization: api-key
 const apiKey = defaultClient.authentications["api-key"];
-apiKey.apiKey = process.env.BREVO_API_KEY; // <-- Store API key in .env
+apiKey.apiKey = process.env.BREVO_API_KEY; // <-- API key in .env
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
@@ -15,14 +15,14 @@ const sendMail = async (options) => {
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.sender = {
-      email: process.env.STMP_SENDER, // must be verified sender in Brevo
+      email: process.env.BREVO_VERIFIED_SENDER, // must be verified sender in Brevo.com
       name: "FAIRLIOS",
     };
 
     sendSmtpEmail.to = [
       {
         email: options.email,
-        name: options.name || "User",
+        name: options.name || "FAIRLIOS",
       },
     ];
 
@@ -36,7 +36,7 @@ const sendMail = async (options) => {
     };
 
     const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("✅ Email sent successfully:", data);
+    console.log("✅ Email sent to:", data.to[0].email);
     return data;
   } catch (error) {
     console.error("❌ Email send failed:", error);
