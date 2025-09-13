@@ -24,11 +24,17 @@ const registerUser = async (req, res, next) => {
     if (user && user.isVerified === false) {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
     const confirmURL = `${req.protocol}://${req.get('host')}/verify/${token}`;
-    sendMail( {
+
+    const mailResponse = await sendMail( {
       email,
       subject: "Welcome to FAIRLIOS",
       message: `Hi ${name}, \n\nWelcome to FAIRLIOS. \n\nPlease verify your email address within 24 hours by clicking the link below.\n\n${confirmURL}\n\nThanks,\nTeam FAIRLIOS`,
     });
+    if (!mailResponse) {
+      await User.findByIdAndDelete(user._id);
+      req.flash("error", "Verification link could not be sent to your email, Try again later.");
+      return res.redirect('/register');
+    }
   }else {
     req.flash("error", "Something went wrong, Please try again.");
     return res.redirect('/register');

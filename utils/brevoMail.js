@@ -36,12 +36,13 @@ const sendMail = async (options) => {
     };
 
     const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("✅ Email sent to:", data.to[0].email);
+    console.log("✅ Email sent to:", sendSmtpEmail.to[0].email);
     return data;
   } catch (error) {
-    console.error("❌ Email send failed:", error);
-
-    throw error;
+    const errMsg = error?.response?.text || error?.message || "Unknown error";
+    console.error("❌ Email send failed:", errMsg);
+    return null;
+    // throw error;
   }
 };
 
