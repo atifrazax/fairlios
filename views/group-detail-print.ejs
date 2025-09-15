@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fairlios Report - Made with ❤️ by Atif Raza | www.atifraza.is-great.net</title>
+   <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      margin: 20px;
+      color: #333;
+      position: relative;
+    }
+
+    /* Watermark */
+    .watermark {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 60px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.08);
+    white-space: nowrap;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+
+    h2, h4, h5 {
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    p {
+      margin: 4px 0;
+    }
+
+    .text-center { text-align: center; }
+    .text-muted { color: #6c757d; }
+    .fw-bold { font-weight: 600; }
+    .small { font-size: 12px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .mt-5 { margin-top: 20px; }
+
+    /* Table Styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    table th, table td {
+      border: 1px solid #dee2e6;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    thead {
+      background-color: #f8f9fa;
+    }
+
+    .table-sm th, .table-sm td {
+      padding: 4px 6px;
+      font-size: 13px;
+    }
+
+    /* Footer */
+    .text-muted p {
+      margin-top: 8px;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <!--  Watermark -->
+  <div class="watermark">FAIRLIOS <%= group.expenseCode %></div>
+  <!-- /* Watermark -->
+    <!-- 🖨️ Print-Friendly Container -->
+<div class="container d-none d-print-block">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold mt-3">Fair Group Report</h2>
+    <p class="text-muted">Generated on <%= new Date().toDateString() %> by <%= user.name %><br><%= user.email %></p>
+  </div>
+  <!-- Group Info -->
+  <div class="mb-3">
+    <h4 class="fw-bold">Group: <%= group.expenseCode %></h4>
+    <p><strong>Average Share:</strong> Rs <%= avgShare %></p>
+    <p><strong>Members(<%= group.members.length %>):</strong>
+      <% group.members.forEach(m => { %>
+        <%= m.name %><% if (group.members.indexOf(m) !== group.members.length - 1) { %>, <% } %>
+      <% }) %>
+    </p>
+  </div>
+  <!-- Expenses Table -->
+  <% if (expenses.length > 0) { %>
+    <h5 class="fw-bold mb-2">Expenses</h5>
+    <table class="table table-bordered table-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Title</th>
+          <th>Amount</th>
+          <th>Note</th>
+          <th>Date</th>
+          <th>Paid By</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% expenses.forEach(exp => { %>
+          <tr>
+            <td><%= exp.title %></td>
+            <td>Rs <%= exp.amount %></td>
+            <td><%= exp.note || "-" %></td>
+            <td><%= exp.date.toDateString() %></td>
+            <td><%= exp.createdBy.name %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No expenses recorded.</p>
+  <% } %>
+
+  <!-- Totals -->
+  <h5 class="fw-bold mt-4">Per Person Totals</h5>
+  <table class="table table-bordered table-sm">
+    <thead class="table-light">
+      <tr>
+        <th>Member</th>
+        <th>Total Spent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Object.keys(perUserTotals).forEach(uid => { %>
+        <tr>
+          <td><%= perUserTotals[uid].name %></td>
+          <td>Rs <%= perUserTotals[uid].total %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <!-- Balances -->
+  <h5 class="fw-bold mt-4">Balances (Who Owes Who)</h5>
+  <table class="table table-bordered table-sm">
+    <thead class="table-light">
+      <tr>
+        <th>Member</th>
+        <th>Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% balances.forEach(b => { %>
+        <tr>
+          <td><%= b.name %></td>
+          <td><%= b.status %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-5 small text-muted">
+    <p>FAIRLIOS - Made with ❤️ by Atif Raza | www.atifraza.is-great.net</p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fairlios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-5 background-white p-4 shadow">
+    <form action="/expense/add-expense/<%= expenseId %>" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addGroupExpenseModalLabel">Add Group Expense</h5>
+        </div><br>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" name="amount" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <input type="text" name="category" class="form-control" placeholder="e.g. Food, Travel, Shopping" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Note (optional)</label>
+            <textarea name="note" class="form-control"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Group Code</label>
+            <input type="text" name="expenseCode" id="expenseCode" class="form-control" value="<%= expenseId %>" readonly disabled>
+          </div>
+        </div><br>
+
+        <div class="mb-3">
+          <a href="javascript:history.back()" type="button" class="btn btn-secondary">⬅ Back</a>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+        </div>
+    </div>
+</div>
+        <%- include('partials/footer') %>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/main.js"></script>
+</body>
+</html>
