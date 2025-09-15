@@ -2,10 +2,13 @@ const axios = require('axios');
 
 const ipData = async (req, res) => {
     let ip;
-    if (process.env.NODE_ENV === 'development') {
+    if (!process.env.NODE_ENV === 'development') {
     ip = '8.8.8.8';
     } else {
-    ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    if (ip.includes(",")) {
+        ip = ip.split(",")[0];
+    }
     }
     const response = await axios.get(`https://ipapi.co/${ip}/json/`);
     return response.data;
