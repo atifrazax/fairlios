@@ -5,7 +5,9 @@ const ipData = async (req, res) => {
     if (process.env.NODE_ENV === 'development') {
     ip = '8.8.8.8';
     } else {
-    ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+        if (ip.includes(",")) {
+            ip = ip.split(",")[0]; // take the first IP
     }
     const response = await axios.get(`https://ipapi.co/${ip}/json/`);
     return response.data;
