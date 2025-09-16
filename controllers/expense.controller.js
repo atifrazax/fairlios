@@ -131,9 +131,9 @@ const groupDetail = async (req, res, next) => {
         balance: Number(balance.toFixed(2)),
         status:
           balance > 0
-            ? `Gets Rs ${balance.toFixed(2)}`
+            ? `${balance.toFixed(2)}`
             : balance < 0
-            ? `Owes Rs ${Math.abs(balance).toFixed(2)}`
+            ? `${Math.abs(balance).toFixed(2)}`
             : "Settled",
       };
     });
@@ -165,7 +165,7 @@ const groupDetailPrint = async (req, res, next) => {
     if (!group) {
       return next(createError("Group not found", 404));
     }
-    // ----/Puppeteer code
+
     const expenses = await Expense.find({ group: group._id })
       .populate("createdBy", "name email").sort("-date")
       .lean();
@@ -226,9 +226,9 @@ const groupDetailPrint = async (req, res, next) => {
         balance: Number(balance.toFixed(2)),
         status:
           balance > 0
-            ? `Gets Rs ${balance.toFixed(2)}`
+            ? `Gets ${balance.toFixed(2)}`
             : balance < 0
-            ? `Owes Rs ${Math.abs(balance).toFixed(2)}`
+            ? `Owes ${Math.abs(balance).toFixed(2)}`
             : "Settled",
       };
     });

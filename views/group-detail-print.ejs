@@ -91,7 +91,7 @@
   <!-- Group Info -->
   <div class="mb-3">
     <h4 class="fw-bold">Group: <%= group.expenseCode %></h4>
-    <p><strong>Average Share:</strong> Rs <%= avgShare %></p>
+    <p><strong>Average Share:</strong> <%= user.currencySymbol %> <%= avgShare %></p>
     <p><strong>Members(<%= group.members.length %>):</strong>
       <% group.members.forEach(m => { %>
         <%= m.name %><% if (group.members.indexOf(m) !== group.members.length - 1) { %>, <% } %>
@@ -115,7 +115,7 @@
         <% expenses.forEach(exp => { %>
           <tr>
             <td><%= exp.title %></td>
-            <td>Rs <%= exp.amount %></td>
+            <td><%= user.currencySymbol %> <%= exp.amount %></td>
             <td><%= exp.note || "-" %></td>
             <td><%= exp.date.toDateString() %></td>
             <td><%= exp.createdBy.name %></td>
@@ -140,7 +140,7 @@
       <% Object.keys(perUserTotals).forEach(uid => { %>
         <tr>
           <td><%= perUserTotals[uid].name %></td>
-          <td>Rs <%= perUserTotals[uid].total %></td>
+          <td><%= user.currencySymbol %> <%= perUserTotals[uid].total %></td>
         </tr>
       <% }) %>
     </tbody>
@@ -152,7 +152,7 @@
     <thead class="table-light">
       <tr>
         <th>Member</th>
-        <th>Balance</th>
+        <th>Balance (<%= user.currencySymbol %>)</th>
       </tr>
     </thead>
     <tbody>

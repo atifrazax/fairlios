@@ -64,12 +64,12 @@
             <div class="card-body d-flex flex-column">
               <p class="card-text">
                 <strong>Your Share:</strong> 
-                <span class="text-success">Rs <%= groupTotals[code].spentByYou %></span>
+                <span class="text-success"><%= user.currencySymbol %> <%= groupTotals[code].spentByYou %></span>
               </p>
               
               <p class="card-text">
                 <strong>Group Total:</strong> 
-                <span class="fw-semibold">Rs <%= groupTotals[code].total %></span>
+                <span class="text-success"><%= user.currencySymbol %> <%= groupTotals[code].total %></span>
               </p>
               
               <p class="card-text">

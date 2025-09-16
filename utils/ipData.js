@@ -1,8 +1,9 @@
 const axios = require('axios');
+require('dotenv').config();
 
 const ipData = async (req, res) => {
     let ip;
-    if (!process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
     ip = '8.8.8.8';
     } else {
     ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;

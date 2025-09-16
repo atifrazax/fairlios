@@ -35,7 +35,7 @@
     <!-- Avg Share -->
     <div class="d-flex align-items-center bg-white text-primary px-2 py-1 rounded-pill shadow-sm">
       <span class="me-2 small text-muted">Avg Share</span>
-      <span class="fw-bold fs-6">Rs <%= avgShare %></span>
+      <span class="fw-bold fs-6"><%= user.currencySymbol %> <%= avgShare %></span>
     </div>
 
     <!-- Members Count -->
@@ -83,7 +83,7 @@
           <% expenses.forEach(exp => { %>
             <tr>
               <td class="fw-bold"><%= exp.title %></td>
-              <td class="text-success"><%= exp.amount %></td>
+              <td class="text-success"><%= user.currencySymbol %> <%= exp.amount %></td>
               <td class="d-none d-md-table-cell"><%= exp.note || "-" %></td>
               <td class="d-none d-md-table-cell"><%= exp.date.toDateString() %></td>
               <td class="align-middle">
@@ -179,7 +179,7 @@
                       <%= perUserTotals[uid].name %>
                     </div>
                   </td>
-                  <td class="fw-bold text-success">Rs <%= perUserTotals[uid].total %></td>
+                  <td class="fw-bold text-success"><%= user.currencySymbol %> <%= perUserTotals[uid].total %></td>
                 </tr>
               <% }) %>
             </tbody>
@@ -216,9 +216,9 @@
                   </td>
                   <td>
                     <% if (b.balance > 0) { %>
-                      <span class="text-success fw-bold"><%= b.status %></span>
+                      <span class="text-success fw-bold">Gets <%= user.currencySymbol %> <%= b.status %></span>
                     <% } else if (b.balance < 0) { %>
-                      <span class="text-danger fw-bold"><%= b.status %></span>
+                      <span class="text-danger fw-bold">Owes <%= user.currencySymbol %> <%= b.status %></span>
                     <% } else { %>
                       <span class="text-muted"><%= b.status %></span>
                     <% } %>

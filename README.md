@@ -24,7 +24,7 @@ It is built with **Node.js, Express, MongoDB (Mongoose), EJS, and Bootstrap**.
 - 📱 **Twilio SMS Alerts** – Send SMS notifications for contact form (to admin number)
 - 📄 **PDF Reports** – Generate detailed expense reports using html-pdf-node
 - 🛡️ **Security Enhancements** – Middleware protections with Helmet.js and Rate Limiting to prevent abuse
-- 🔗 **Axios API Fetching** – Used for integrating external services (weather, IP info, etc.)
+- 🔗 **Axios API Fetching** – Used for integrating external services (Weather, Currency, IP info, etc.)
 
 ---
 

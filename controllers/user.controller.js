@@ -12,6 +12,7 @@ const sendMail = require("../utils/brevoMail");
 const sendSMS = require("../utils/sendSMS");
 const ipData = require("../utils/ipData");
 const weatherData = require("../utils/weatherData");
+const currencySymbols = require("../utils/currencySymbols")
 
 
 /// Register Page
@@ -101,7 +102,7 @@ const loginUser = async (req, res, next) => {
         // Weather API
         const weatherIcon = await weatherData(ip.latitude, ip.longitude);
       // generate JWT token
-      const tokenData = { _id: user._id, name: user.name, email: user.email, weatherIcon: weatherIcon, timezone: ip.timezone };
+      const tokenData = { _id: user._id, name: user.name, email: user.email, weatherIcon: weatherIcon, timezone: ip.timezone, currencySymbol: currencySymbols[ip.currency] || "$" };
       const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1d' });
       // Store token in cookie
       res.cookie('token', token, { httpOnly: true, maxAge: 24*60*60*1000 }); // 24 hours
@@ -203,7 +204,7 @@ const dashboard = async (req, res, next) => {
         const options = { timeZone: timezone, hour: "2-digit", hour12: false };
         const formatter = new Intl.DateTimeFormat("en-GB", options);
         const hour = parseInt(formatter.format(now));
-        console.log(hour); // Always 0–23
+        // console.log(hour); // Always 0–23
         const greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : hour < 23 ? "Good Evening" : "Hello";
 
     // 👉 4. Render without perUserOverall (privacy issue removed)
